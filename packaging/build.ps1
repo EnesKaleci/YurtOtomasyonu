@@ -29,6 +29,11 @@ $proj.SelectSingleNode('//m:AssemblyName',$ns).InnerText=$app
 if($Kind -eq 'Yurt') {
  foreach($node in @($proj.SelectNodes('//m:COMReference',$ns))){[void]$node.ParentNode.RemoveChild($node)}
  foreach($f in Get-ChildItem $dir -Filter 'FrmAna*.cs') {
+  if($f.Name -eq 'FrmAna.cs') {
+   $radio=Get-Content -LiteralPath $f.FullName -Raw
+   $radio=[regex]::Replace($radio,'axWindowsMediaPlayer1\.URL\s*=\s*("[^"]+");','System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo($1) { UseShellExecute = true });')
+   Set-Content -LiteralPath $f.FullName -Value $radio -Encoding utf8BOM
+  }
   $lines=Get-Content -LiteralPath $f.FullName | Where-Object {$_ -notmatch 'using AxWMPLib' -and ($_ -notmatch 'axWindowsMediaPlayer1' -or $_ -match 'private void')}
   Set-Content -LiteralPath $f.FullName -Value $lines -Encoding utf8BOM
  }
