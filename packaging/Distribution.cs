@@ -48,11 +48,11 @@ internal static class Distribution {
                 }
                 if(smoke) {
                     using(var tx=c.BeginTransaction()) { q.Transaction=tx;
-                        q.CommandText="__INSERT_ADMIN__"; q.Parameters.AddWithValue("@u","ci_probe"); q.Parameters.AddWithValue("@p","Probe-12345"); q.ExecuteNonQuery();
-                        q.Parameters.Clear(); q.CommandText="SELECT COUNT(*) FROM __ADMIN_TABLE__ WHERE __USER_COL__='ci_probe'";
+                        q.CommandText="__INSERT_ADMIN__"; q.Parameters.AddWithValue("@u","ci_Çağrı"); q.Parameters.AddWithValue("@p","Probe-12345"); q.ExecuteNonQuery();
+                        q.Parameters.Clear(); q.CommandText="SELECT COUNT(*) FROM __ADMIN_TABLE__ WHERE __USER_COL__='ci_Çağrı'";
                         if(Convert.ToInt32(q.ExecuteScalar())!=1) throw new Exception("CRUD insert verification failed");
-                        q.CommandText="UPDATE __ADMIN_TABLE__ SET __PASS_COL__='Probe-54321' WHERE __USER_COL__='ci_probe'"; if(q.ExecuteNonQuery()!=1) throw new Exception("CRUD update failed");
-                        q.CommandText="DELETE FROM __ADMIN_TABLE__ WHERE __USER_COL__='ci_probe'"; if(q.ExecuteNonQuery()!=1) throw new Exception("CRUD delete failed");
+                        q.CommandText="UPDATE __ADMIN_TABLE__ SET __PASS_COL__='Probe-54321' WHERE __USER_COL__='ci_Çağrı'"; if(q.ExecuteNonQuery()!=1) throw new Exception("CRUD update failed");
+                        q.CommandText="DELETE FROM __ADMIN_TABLE__ WHERE __USER_COL__='ci_Çağrı'"; if(q.ExecuteNonQuery()!=1) throw new Exception("CRUD delete failed");
                         tx.Rollback(); q.Transaction=null;
                     }
                     File.WriteAllText(Path.Combine(DataDirectory,"smoke.txt"),"PASS: schema, seed, parameterized admin insert, read, update, delete, rollback.");
