@@ -29,7 +29,7 @@ $proj.SelectSingleNode('//m:AssemblyName',$ns).InnerText=$app
 if($Kind -eq 'Yurt') {
  foreach($node in @($proj.SelectNodes('//m:COMReference',$ns))){[void]$node.ParentNode.RemoveChild($node)}
  foreach($f in Get-ChildItem $dir -Filter 'FrmAna*.cs') {
-  $lines=Get-Content -LiteralPath $f.FullName | Where-Object {$_ -notmatch 'AxWMPLib|axWindowsMediaPlayer1'}
+  $lines=Get-Content -LiteralPath $f.FullName | Where-Object {$_ -notmatch 'using AxWMPLib' -and ($_ -notmatch 'axWindowsMediaPlayer1' -or $_ -match 'private void')}
   Set-Content -LiteralPath $f.FullName -Value $lines -Encoding utf8BOM
  }
  $sqlFile=Join-Path $dir 'SqlBaglantim.cs'
@@ -93,7 +93,7 @@ if($LASTEXITCODE){throw 'Schema generation failed'}
 $solution=Get-ChildItem $project.Directory.Parent.FullName -Filter '*.sln' | Select-Object -First 1
 if($solution){nuget restore $solution.FullName -NonInteractive}
 if($LASTEXITCODE){throw 'NuGet restore failed'}
-msbuild $project.FullName /m /p:Configuration=Release "/p:OutputPath=$out/" /p:Platform=AnyCPU /verbosity:minimal
+msbuild $project.FullName /m /p:Configuration=Release "/p:OutputPath=$out/" /p:Platform=AnyCPU /p:PlatformTarget=x64 /p:Prefer32Bit=false /verbosity:minimal
 if($LASTEXITCODE){throw 'Build failed'}
 Get-ChildItem $out -Recurse -Filter '*.pdb' | Remove-Item
 $config=Join-Path $out "$app.exe.config"
