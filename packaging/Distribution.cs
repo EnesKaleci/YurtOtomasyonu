@@ -32,7 +32,7 @@ internal static class Distribution {
                     q.Parameters.Clear();
                     string mdf=Path.Combine(DataDirectory,Database+".mdf"), ldf=Path.Combine(DataDirectory,Database+"_log.ldf");
                     q.CommandText=File.Exists(mdf) ? "CREATE DATABASE ["+Database+"] ON (FILENAME=N'"+mdf.Replace("'","''")+"') FOR ATTACH" :
-                        "CREATE DATABASE ["+Database+"] ON PRIMARY (NAME=N'"+Database+"',FILENAME=N'"+mdf.Replace("'","''")+"') LOG ON (NAME=N'"+Database+"_log',FILENAME=N'"+ldf.Replace("'","''")+"')";
+                        "CREATE DATABASE ["+Database+"] ON PRIMARY (NAME=N'"+Database+"',FILENAME=N'"+mdf.Replace("'","''")+"') LOG ON (NAME=N'"+Database+"_log',FILENAME=N'"+ldf.Replace("'","''")+"') COLLATE Turkish_CI_AS";
                     q.CommandTimeout=120; q.ExecuteNonQuery();
                 }
             }
